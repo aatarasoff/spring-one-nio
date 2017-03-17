@@ -1,0 +1,5 @@
+rootProject.name = 'spring-one-nio'
+
+include 'autoconfigure'
+include 'starter'
+include 'example'

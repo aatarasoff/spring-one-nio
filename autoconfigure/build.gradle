@@ -1,0 +1,53 @@
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'nebula.integtest-standalone'
+
+dependencies {
+    compileOnly "asm:asm"
+    compileOnly "ru.odnoklassniki:one-nio"
+
+    compileOnly "org.springframework.boot:spring-boot-starter-web"
+    compileOnly "org.springframework.boot:spring-boot-starter-actuator"
+}
+
+jacoco {
+    toolVersion = "0.7.6.201602180812"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId 'spring-one-nio-autoconfigure'
+
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+}
+
+bintray {
+    user = System.properties['BINTRAY_USER']
+    key = System.properties['BINTRAY_KEY']
+    publications = ['mavenJava']
+    publish = true
+    pkg {
+        repo = 'maven'
+        name = 'spring-one-nio-autoconfigure'
+    }
+}

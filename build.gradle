@@ -1,0 +1,59 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.2.RELEASE'
+	}
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:+'
+		classpath 'com.netflix.nebula:nebula-project-plugin:+'
+		classpath 'com.netflix.nebula:nebula-release-plugin:+'
+		classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:+'
+	}
+}
+
+allprojects {
+	apply plugin: 'idea'
+	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'nebula.nebula-release'
+
+	repositories {
+		mavenLocal()
+		jcenter()
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom 'io.spring.platform:platform-bom:Brussels-RELEASE'
+			mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Camden.SR5'
+		}
+
+		dependencies {
+			dependency 'asm:asm:3.3'
+			dependency 'ru.odnoklassniki:one-nio:1.0'
+			dependency 'org.projectlombok:lombok:1.16.8'
+		}
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+	test {
+		reports {
+			junitXml.enabled = true
+			html.enabled = true
+		}
+	}
+
+	dependencies {
+		compileOnly 'org.projectlombok:lombok'
+
+		testCompile('org.springframework.boot:spring-boot-starter-test')
+	}
+}
