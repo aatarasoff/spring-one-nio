@@ -6,25 +6,18 @@
 
 ### How to run
 
-1. Checkout code from [one-nio](https://github.com/odnoklassniki/one-nio) repository to your local machine.
-2. Install library to you local maven repository:
-
-```
-mvn install
-```
-
-3. Import project into your IDE, or run:
+1. Import project into your IDE, or run:
 
 ```
 ./gradlew example:bootRun
 ```
 
-4. Call test endpoint with curl:
+2. Call test endpoint with curl:
 
 ```
-curl localhost:8080/test/simple
+curl localhost:10080/simple
 ```
 
-5. You should receive `200 OK` response with text body "Simple".
+3. You should receive `200 OK` response with text body "Simple".
 
 ## Enjoy!
