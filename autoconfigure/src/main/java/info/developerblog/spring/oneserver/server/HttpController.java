@@ -1,4 +1,4 @@
-package info.developerblog.spring.oneserver;
+package info.developerblog.spring.oneserver.server;
 
 import org.springframework.stereotype.Component;
 
@@ -13,5 +13,4 @@ import java.lang.annotation.*;
 @Inherited
 @Component
 public @interface HttpController {
-    String[] value() default {};
 }

@@ -1,7 +1,9 @@
-package info.developerblog.spring.oneserver;
+package info.developerblog.spring.oneserver.server;
 
 import one.nio.http.HttpServer;
-import one.nio.net.ConnectionString;
+import one.nio.http.HttpServerConfig;
+import one.nio.server.AcceptorConfig;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,7 +27,14 @@ public class OneServerConfiguration implements ApplicationContextAware {
 
     @Bean
     public HttpServer httpServer() throws IOException {
-        HttpServer httpServer =  new RelativePathHttpServer(new ConnectionString(generateConnection(properties)));
+        AcceptorConfig ac = new AcceptorConfig();
+        ac.address = properties.getAdvertiseIp();
+        ac.port = properties.getPort();
+
+        HttpServerConfig serverConfig = new HttpServerConfig();
+        serverConfig.acceptors = new AcceptorConfig[]{ac};
+
+        HttpServer httpServer =  new HttpServer(serverConfig);
 
         for (String beanName : applicationContext.getBeanNamesForAnnotation(HttpController.class)) {
             httpServer.addRequestHandlers(applicationContext.getBean(beanName));
@@ -42,13 +51,5 @@ public class OneServerConfiguration implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-    }
-
-    private String generateConnection(OneServerProperties properties) {
-        return "socket://" +
-                properties.getAdvertiseIp() +
-                ":" +
-                properties.getPort() +
-                "?jmx=false";
     }
 }

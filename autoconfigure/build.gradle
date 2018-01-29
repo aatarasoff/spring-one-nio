@@ -5,11 +5,11 @@ apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'nebula.integtest-standalone'
 
 dependencies {
-    compileOnly "asm:asm"
     compileOnly "ru.odnoklassniki:one-nio"
 
-    compileOnly "org.springframework.boot:spring-boot-starter-web"
     compileOnly "org.springframework.boot:spring-boot-starter-actuator"
+    compileOnly "org.springframework.cloud:spring-cloud-starter-netflix-ribbon"
+    compileOnly "org.springframework.cloud:spring-cloud-starter-openfeign"
 }
 
 jacoco {

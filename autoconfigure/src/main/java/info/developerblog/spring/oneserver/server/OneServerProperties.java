@@ -1,4 +1,4 @@
-package info.developerblog.spring.oneserver;
+package info.developerblog.spring.oneserver.server;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "oneserver")
 public class OneServerProperties {
     private String advertiseIp;
-    private String port;
+    private Integer port;
 
     public String getAdvertiseIp() {
         return advertiseIp;
@@ -18,11 +18,11 @@ public class OneServerProperties {
         this.advertiseIp = advertiseIp;
     }
 
-    public String getPort() {
+    public Integer getPort() {
         return port;
     }
 
-    public void setPort(String port) {
+    public void setPort(Integer port) {
         this.port = port;
     }
 }

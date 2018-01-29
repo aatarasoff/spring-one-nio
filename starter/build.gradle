@@ -4,11 +4,11 @@ apply plugin: 'com.jfrog.bintray'
 dependencies {
     compile project(':autoconfigure')
 
-    compile('asm:asm')
     compile('ru.odnoklassniki:one-nio')
 
-    compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.cloud:spring-cloud-starter-netflix-ribbon')
+    compile('org.springframework.cloud:spring-cloud-starter-openfeign')
 }
 
 task sourceJar(type: Jar) {

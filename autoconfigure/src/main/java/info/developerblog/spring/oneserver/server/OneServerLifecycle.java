@@ -1,4 +1,4 @@
-package info.developerblog.spring.oneserver;
+package info.developerblog.spring.oneserver.server;
 
 import one.nio.http.HttpServer;
 import org.springframework.context.SmartLifecycle;
