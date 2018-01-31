@@ -12,9 +12,11 @@ import org.springframework.cloud.netflix.feign.ribbon.FeignLoadBalancer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.netflix.client.ClientRequest;
 import feign.Client;
+import org.apache.commons.lang.StringUtils;
 
 import one.nio.http.HttpClient;
 import one.nio.http.Request;
@@ -25,15 +27,27 @@ import one.nio.http.Request;
 public class OneHttpRequest extends ClientRequest implements Cloneable {
     private final Request request;
 
-    public OneHttpRequest(Request request, URI uri) {
-        setUri(uri);
-        this.request = toRequest(request);
+    public OneHttpRequest(RequestMethod requestMethod, String uri) {
+        setUri(URI.create(uri));
+        this.request = toRequest(
+                new Request(toOneRequestMethod(requestMethod), "", true)
+        );
     }
 
     private Request toRequest(Request request) {
+        StringBuilder pathBuilder = new StringBuilder();
+
+        pathBuilder.append(getUri().getPath());
+
+        if (StringUtils.isNotBlank(getUri().getQuery())) {
+            pathBuilder
+                    .append("?")
+                    .append(getUri().getQuery());
+        }
+
         Request result = new Request(
                 request.getMethod(),
-                getUri().getPath(),
+                pathBuilder.toString(),
                 true
         );
 
@@ -50,5 +64,28 @@ public class OneHttpRequest extends ClientRequest implements Cloneable {
 
     public Request toRequest() {
         return toRequest(this.request);
+    }
+
+    private int toOneRequestMethod(RequestMethod requestMethod) {
+        switch (requestMethod) {
+            case GET:
+                return Request.METHOD_GET;
+            case POST:
+                return Request.METHOD_POST;
+            case PUT:
+                return Request.METHOD_PUT;
+            case PATCH:
+                return Request.METHOD_PATCH;
+            case DELETE:
+                return Request.METHOD_DELETE;
+            case HEAD:
+                return Request.METHOD_HEAD;
+            case OPTIONS:
+                return Request.METHOD_OPTIONS;
+            case TRACE:
+                return Request.METHOD_TRACE;
+            default:
+                throw new IllegalArgumentException("Request method " + requestMethod + " is not supported");
+        }
     }
 }

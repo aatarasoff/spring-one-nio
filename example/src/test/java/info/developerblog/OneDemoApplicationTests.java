@@ -1,10 +1,14 @@
 package info.developerblog;
 
 import java.net.URI;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import info.developerblog.spring.oneserver.client.OneHttpRequest;
 import info.developerblog.spring.oneserver.client.OneHttpResponse;
@@ -31,7 +35,7 @@ public class OneDemoApplicationTests {
 		Response response = client.get("/simple");
 
 		assertEquals(200, response.getStatus());
-		assertEquals("Simple", response.getBodyUtf8());
+		assertEquals("I'am simple", response.getBodyUtf8());
 	}
 
 	@Test
@@ -39,8 +43,8 @@ public class OneDemoApplicationTests {
 		OneHttpResponse response = loadBalancerFactory
 				.create("cool-app")
 				.executeWithLoadBalancer(new OneHttpRequest(
-						new Request(Request.METHOD_GET, "", true),
-						URI.create("http://cool-app/simple")
+						RequestMethod.GET,
+						"http://cool-app/simple"
 				));
 
 		assertEquals(true, response.isSuccess());
