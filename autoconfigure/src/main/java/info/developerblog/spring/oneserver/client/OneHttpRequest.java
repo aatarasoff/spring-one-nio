@@ -1,24 +1,12 @@
 package info.developerblog.spring.oneserver.client;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.springframework.cloud.netflix.feign.ribbon.FeignLoadBalancer;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.netflix.client.ClientRequest;
-import feign.Client;
 import org.apache.commons.lang.StringUtils;
 
-import one.nio.http.HttpClient;
 import one.nio.http.Request;
 
 /**
@@ -32,6 +20,31 @@ public class OneHttpRequest extends ClientRequest implements Cloneable {
         this.request = toRequest(
                 new Request(toOneRequestMethod(requestMethod), "", true)
         );
+    }
+
+    public OneHttpRequest withBody(byte[] body) {
+        this.request.setBody(body);
+        return this;
+    }
+
+    public static OneHttpRequest get(String uri) {
+        return new OneHttpRequest(RequestMethod.GET, uri);
+    }
+
+    public static OneHttpRequest post(String uri) {
+        return new OneHttpRequest(RequestMethod.POST, uri);
+    }
+
+    public static OneHttpRequest put(String uri) {
+        return new OneHttpRequest(RequestMethod.PUT, uri);
+    }
+
+    public static OneHttpRequest patch(String uri) {
+        return new OneHttpRequest(RequestMethod.PATCH, uri);
+    }
+
+    public static OneHttpRequest delete(String uri) {
+        return new OneHttpRequest(RequestMethod.DELETE, uri);
     }
 
     private Request toRequest(Request request) {
@@ -57,7 +70,12 @@ public class OneHttpRequest extends ClientRequest implements Cloneable {
             }
         }
 
-        result.setBody(request.getBody());
+        byte[] requestBody = request.getBody();
+
+        if (requestBody != null) {
+            result.addHeader("Content-Length: " + requestBody.length);
+            result.setBody(requestBody);
+        }
 
         return result;
     }

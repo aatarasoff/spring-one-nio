@@ -1,4 +1,4 @@
-package info.developerblog.services;
+package info.developerblog.sample.services;
 
 import org.springframework.stereotype.Component;
 

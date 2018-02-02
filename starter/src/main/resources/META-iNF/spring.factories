@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-info.developerblog.spring.oneserver.server.OneServerConfiguration
+info.developerblog.spring.oneserver.server.OneServerConfiguration,\
+info.developerblog.spring.oneserver.ribbon.OneRibbonAutoConfiguration

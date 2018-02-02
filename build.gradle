@@ -18,6 +18,9 @@ buildscript {
 }
 
 allprojects {
+	group = 'info.developerblog.spring.cloud'
+	version = '0.0.1'
+
 	apply plugin: 'idea'
 	apply plugin: 'io.spring.dependency-management'
 	apply plugin: 'nebula.nebula-release'

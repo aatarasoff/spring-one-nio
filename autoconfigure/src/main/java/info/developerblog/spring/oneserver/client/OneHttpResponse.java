@@ -17,14 +17,14 @@ import one.nio.http.Response;
  * @author alexander.tarasov
  */
 public class OneHttpResponse implements IResponse {
-    private final String payload;
+    private final byte[] payload;
     private final int status;
     private final Map<String, String> headers = Maps.newHashMap();
     private final URI originalURI;
 
     public OneHttpResponse(Response response,
                            URI originalURI) {
-        payload = response.getBodyUtf8();
+        payload = response.getBody();
         status = response.getStatus();
         for (String header : response.getHeaders()) {
             if (header != null) {

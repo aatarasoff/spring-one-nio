@@ -1,8 +1,6 @@
 package info.developerblog.spring.oneserver.server;
 
-import one.nio.http.HttpServer;
-import one.nio.http.HttpServerConfig;
-import one.nio.server.AcceptorConfig;
+import java.io.IOException;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,9 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
+import one.nio.http.HttpServer;
+import one.nio.http.HttpServerConfig;
+import one.nio.server.AcceptorConfig;
 
 /**
  * @author alexander.tarasov
