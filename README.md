@@ -73,9 +73,9 @@ OneHttpClient httpClient;
 and create request, then call it:
 ```java
 OneHttpResponse response = httpClient.call(
-				"cool-app",
-				OneHttpRequest.get("/loop")
-		);
+	"cool-app",
+	OneHttpRequest.get("/loop")
+);
 
 //do something with response
 check(response.isSuccess());
