@@ -7,6 +7,7 @@ apply plugin: 'nebula.integtest-standalone'
 dependencies {
     compileOnly "ru.odnoklassniki:one-nio"
 
+    compileOnly "org.springframework.boot:spring-boot-starter"
     compileOnly "org.springframework.boot:spring-boot-starter-actuator"
     compileOnly "org.springframework.cloud:spring-cloud-starter-netflix-ribbon"
     compileOnly "org.springframework.cloud:spring-cloud-starter-openfeign"

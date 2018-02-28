@@ -20,10 +20,10 @@ import one.nio.http.Response;
 import one.nio.net.ConnectionString;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class OneDemoApplicationTests {
 	@Autowired
-	OneHttpClient httpClient;
+	OneHttpClient oneHttpClient;
 
 	@Test
 	public void simpleClientCall() throws Exception {
@@ -36,7 +36,7 @@ public class OneDemoApplicationTests {
 
 	@Test
 	public void loadBalancedClientCall() throws Exception {
-		OneHttpResponse response = httpClient.call(
+		OneHttpResponse response = oneHttpClient.call(
 				"cool-app",
 				OneHttpRequest.get("/loop")
 		);
@@ -48,7 +48,7 @@ public class OneDemoApplicationTests {
 	public void loadBalancedPostCall() throws Exception {
 		byte[] payload = "Hello!".getBytes(StandardCharsets.UTF_8);
 
-		OneHttpResponse response = httpClient.call(
+		OneHttpResponse response = oneHttpClient.call(
 				"cool-app",
 				OneHttpRequest.post("/withBody").withBody(payload)
 		);

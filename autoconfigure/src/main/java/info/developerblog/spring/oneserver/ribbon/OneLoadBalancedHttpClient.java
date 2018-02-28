@@ -5,13 +5,16 @@ import java.util.concurrent.ConcurrentMap;
 import com.google.common.collect.Maps;
 import info.developerblog.spring.oneserver.client.OneHttpRequest;
 import info.developerblog.spring.oneserver.client.OneHttpResponse;
+import lombok.extern.slf4j.Slf4j;
 
 import one.nio.http.HttpClient;
+import one.nio.http.Response;
 import one.nio.net.ConnectionString;
 
 /**
  * @author alexander.tarasov
  */
+@Slf4j
 public class OneLoadBalancedHttpClient {
     private ConcurrentMap<String, HttpClient> httpClients = Maps.newConcurrentMap();
 
@@ -30,7 +33,8 @@ public class OneLoadBalancedHttpClient {
                     request.getUri()
             );
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage(), e);
+            return new OneHttpResponse(new Response(Response.INTERNAL_ERROR), request.getUri());
         }
     }
 }

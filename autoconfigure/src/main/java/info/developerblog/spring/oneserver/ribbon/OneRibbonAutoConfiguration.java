@@ -26,7 +26,7 @@ public class OneRibbonAutoConfiguration {
     }
 
     @Bean
-    public OneHttpClient oneHttpClient() {
-        return new OneHttpClient();
+    public OneHttpClient oneHttpClient(OneLoadBalancerFactory oneLoadBalancerFactory) {
+        return new OneHttpClient(oneLoadBalancerFactory);
     }
 }
