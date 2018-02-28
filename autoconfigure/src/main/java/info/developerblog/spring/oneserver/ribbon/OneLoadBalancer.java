@@ -53,7 +53,7 @@ public class OneLoadBalancer extends AbstractLoadBalancerAwareClient<OneHttpRequ
 
     @Override
     public RequestSpecificRetryHandler getRequestSpecificRetryHandler(OneHttpRequest request, IClientConfig requestConfig) {
-        return new RequestSpecificRetryHandler(false, false, RetryHandler.DEFAULT, null);
+        return new RequestSpecificRetryHandler(false, false, getRetryHandler(), requestConfig);
     }
 
 }

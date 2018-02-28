@@ -2,6 +2,7 @@ package info.developerblog.spring.oneserver.ribbon;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
@@ -21,11 +22,13 @@ import info.developerblog.spring.oneserver.client.OneHttpClient;
 @AutoConfigureAfter(RibbonAutoConfiguration.class)
 public class OneRibbonAutoConfiguration {
     @Bean
+    @ConditionalOnMissingBean
     public OneLoadBalancerFactory oneLoadBalancerFactory(SpringClientFactory springClientFactory) {
         return new OneLoadBalancerFactory(springClientFactory);
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public OneHttpClient oneHttpClient(OneLoadBalancerFactory oneLoadBalancerFactory) {
         return new OneHttpClient(oneLoadBalancerFactory);
     }
