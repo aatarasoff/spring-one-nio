@@ -2,6 +2,39 @@
 
 #### This project helps with integration between [Spring Boot](https://projects.spring.io/spring-boot/) and [One NIO](https://github.com/odnoklassniki/one-nio).
 
+### How to connect the project
+
+Add `jcenter` repository:
+```groovy
+repositories {
+    jcenter()
+}
+```
+
+or for maven:
+```xml
+<repositories>
+    <repository>
+        <id>jcenter</id>
+        <url>http://jcenter.bintray.com/</url>
+    </repository>
+</repositories>
+```
+
+And add dependency with latest version (or feel free to choose specific)
+```groovy
+compile 'info.developerblog.spring.cloud:spring-one-nio-starter:+'
+```
+
+or for maven:
+```xml
+<dependency>
+    <groupId>info.developerblog.spring.cloud</groupId>
+    <artifactId>spring-one-nio-starter</artifactId>
+    <version>x.y.z</version>
+</dependency>
+```
+
 ### How to run
 
 1. Import project into your IDE, or run:
