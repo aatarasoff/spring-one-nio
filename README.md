@@ -46,10 +46,10 @@ or for maven:
 2. Call test endpoint with curl:
 
 ```
-curl localhost:10080/simple
+curl localhost:10080simple?name=service
 ```
 
-3. You should receive `200 OK` response with text body "Simple".
+3. You should receive `200 OK` response with text body "Simple service".
 
 ### How it works
 
