@@ -25,10 +25,14 @@ public class OneLoadBalancerFactory {
         if (this.cache.containsKey(clientName)) {
             return this.cache.get(clientName);
         }
+
         IClientConfig config = this.factory.getClientConfig(clientName);
         ILoadBalancer lb = this.factory.getLoadBalancer(clientName);
         ServerIntrospector serverIntrospector = this.factory.getInstance(clientName, ServerIntrospector.class);
+
         OneLoadBalancer client = new OneLoadBalancer(lb, config, serverIntrospector, createLoadBalancedHttpClient(config));
+        modifyLoadBalancer(client);
+
         this.cache.put(clientName, client);
         return client;
     }
@@ -36,4 +40,9 @@ public class OneLoadBalancerFactory {
     protected OneLoadBalancedHttpClient createLoadBalancedHttpClient(IClientConfig config) {
         return new OneLoadBalancedHttpClient(config);
     }
+
+    protected void modifyLoadBalancer(OneLoadBalancer client) {
+        //hook
+    }
+
 }
