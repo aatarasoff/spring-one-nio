@@ -1,7 +1,5 @@
 package info.developerblog.spring.oneserver.client;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.netflix.client.ClientException;
 import info.developerblog.spring.oneserver.ribbon.OneLoadBalancerFactory;
 import lombok.extern.slf4j.Slf4j;

@@ -19,9 +19,6 @@ import one.nio.net.ConnectionString;
  */
 @Slf4j
 public class OneLoadBalancedHttpClient {
-    private final static IClientConfigKey<Integer> ONE_CLIENT_TIMEOUT =
-            new CommonClientConfigKey<Integer>("Timeout") {};
-
     private ConcurrentMap<String, HttpClient> httpClients = Maps.newConcurrentMap();
 
     private final int readTimeout;
