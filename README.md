@@ -76,16 +76,24 @@ public Response getSimpleResponse(@Param("name") String name) {
 
 As you see you could autowire any spring component, service or another bean into it.
 
-In `application.yml` you could provide advertise ip and port as following:
+In `application.yml` you could provide advertise ip and port and other properties as following:
 ```yaml
 oneserver:
+  #required
   advertiseIp: 0.0.0.0
   port: 10080
+  #optional
+  selectorThreadsCount:        # default 0
+  maxWorkersCount:             # default 0
+  minWorkersCount:             # default 0
+  queueTime:                   # default 0 
+  keepAlive:                   # default 0
+  threadPriority:              # default 5 or Thread.NORM_PRIORITY
+  affinity:                    # default false
 ```
 
 #### Client side
 
-This part still in progress and there is no very easy way to use it but it is possible.
 Client side based on **ribbon** load balancer and `HttpClient` from `one-nio`.
 
 For use it with ribbon you should define your client settings in `application.yml`:
@@ -93,6 +101,12 @@ For use it with ribbon you should define your client settings in `application.ym
 cool-app:
   ribbon:
     listOfServers: 127.0.0.1:10080
+    #supported client config keys
+    ConnectTimeout: 1000
+    ReadTimeout: 10000
+    PoolMinThreads: 1
+    PoolMaxThreads: 200
+    KeepAlive: false
 ```
 
 They are all the same as in the case of using rest template or feign.

@@ -13,6 +13,10 @@ public class OneServerProperties {
     private int selectorThreadsCount = 0;
     private int maxWorkersCount = 0;
     private int minWorkersCount = 0;
+    private int queueTime = 0;
+    private int keepAlive = 0;
+    private int threadPriority = Thread.NORM_PRIORITY;
+    private boolean affinity = false;
 
     public String getAdvertiseIp() {
         return advertiseIp;
@@ -52,5 +56,37 @@ public class OneServerProperties {
 
     public void setMinWorkersCount(int minWorkersCount) {
         this.minWorkersCount = minWorkersCount;
+    }
+
+    public int getQueueTime() {
+        return queueTime;
+    }
+
+    public void setQueueTime(int queueTime) {
+        this.queueTime = queueTime;
+    }
+
+    public int getThreadPriority() {
+        return threadPriority;
+    }
+
+    public void setThreadPriority(int threadPriority) {
+        this.threadPriority = threadPriority;
+    }
+
+    public int getKeepAlive() {
+        return keepAlive;
+    }
+
+    public void setKeepAlive(int keepAlive) {
+        this.keepAlive = keepAlive;
+    }
+
+    public boolean isAffinity() {
+        return affinity;
+    }
+
+    public void setAffinity(boolean affinity) {
+        this.affinity = affinity;
     }
 }

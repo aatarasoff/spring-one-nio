@@ -41,6 +41,10 @@ public class OneServerConfiguration implements ApplicationContextAware {
         serverConfig.selectors = properties.getSelectorThreadsCount();
         serverConfig.minWorkers = properties.getMinWorkersCount();
         serverConfig.maxWorkers = properties.getMaxWorkersCount();
+        serverConfig.queueTime = properties.getQueueTime();
+        serverConfig.keepAlive = properties.getKeepAlive();
+        serverConfig.threadPriority = properties.getThreadPriority();
+        serverConfig.affinity = properties.isAffinity();
 
         HttpServer httpServer =  new HttpServer(serverConfig);
 

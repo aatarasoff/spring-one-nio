@@ -1,16 +1,18 @@
 package info.developerblog.spring.oneserver.client;
 
 import com.netflix.client.ClientException;
+import info.developerblog.spring.oneserver.ribbon.OneLoadBalancedHttpClient;
 import info.developerblog.spring.oneserver.ribbon.OneLoadBalancerFactory;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import one.nio.http.Response;
 
 /**
  * @author alexander.tarasov
  */
-@Slf4j
 public class OneHttpClient {
+    private static final Logger log = LoggerFactory.getLogger(OneLoadBalancedHttpClient.class);
     OneLoadBalancerFactory loadBalancerFactory;
 
     public OneHttpClient(OneLoadBalancerFactory loadBalancerFactory) {

@@ -1,14 +1,16 @@
 package info.developerblog.spring.oneserver.ribbon;
 
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
-import com.google.common.collect.Maps;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.netflix.client.config.CommonClientConfigKey;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.client.config.IClientConfigKey;
 import info.developerblog.spring.oneserver.client.OneHttpRequest;
 import info.developerblog.spring.oneserver.client.OneHttpResponse;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import one.nio.http.HttpClient;
 import one.nio.http.Response;
@@ -17,30 +19,42 @@ import one.nio.net.ConnectionString;
 /**
  * @author alexander.tarasov
  */
-@Slf4j
 public class OneLoadBalancedHttpClient {
-    private ConcurrentMap<String, HttpClient> httpClients = Maps.newConcurrentMap();
+    private static final Logger log = LoggerFactory.getLogger(OneLoadBalancedHttpClient.class);
+    private static final IClientConfigKey<Boolean> KeepAlive = new CommonClientConfigKey<Boolean>("KeepAlive") {};
 
-    private final int readTimeout;
-    private final int maxPoolSize;
+    private Cache<String, HttpClient> httpClients = CacheBuilder.newBuilder()
+            .expireAfterAccess(10, TimeUnit.MINUTES)
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .removalListener(notification -> ((HttpClient) notification.getValue()).close())
+            .build();
 
-    public OneLoadBalancedHttpClient(IClientConfig clientConfig) {
-        readTimeout = clientConfig.get(CommonClientConfigKey.ReadTimeout, 10000);
-        maxPoolSize = clientConfig.get(CommonClientConfigKey.PoolMaxThreads, 50);
+    private final IClientConfig clientConfig;
+
+    OneLoadBalancedHttpClient(IClientConfig clientConfig) {
+        this.clientConfig = clientConfig;
     }
 
-    public OneHttpResponse execute(OneHttpRequest request) {
+    OneHttpResponse execute(OneHttpRequest request) {
+        int connectTimeout = clientConfig.get(CommonClientConfigKey.ConnectTimeout, 1000);
+        int readTimeout = clientConfig.get(CommonClientConfigKey.ReadTimeout, 10000);
+        int minPoolSize = clientConfig.get(CommonClientConfigKey.PoolMinThreads, 0);
+        int maxPoolSize = clientConfig.get(CommonClientConfigKey.PoolMaxThreads, 50);
+        boolean keepAlive = clientConfig.get(KeepAlive, false);
+
         String connectionString = request.getUri().getScheme() + "://" +
                 request.getUri().getHost() + ":" + request.getUri().getPort() +
                 "?timeout=" + readTimeout +
+                "&connectTimeout=" + connectTimeout +
+                "&clientMinPoolSize=" + minPoolSize +
                 "&clientMaxPoolSize=" + maxPoolSize +
-                "&keepalive=false";
+                "&keepalive=" + keepAlive;
 
         try {
             return new OneHttpResponse(
-                    httpClients.computeIfAbsent(
+                    httpClients.get(
                             connectionString,
-                            k -> new HttpClient(new ConnectionString(connectionString))
+                            () -> new HttpClient(new ConnectionString(connectionString))
                     ).invoke(request.toRequest()),
                     request.getUri()
             );

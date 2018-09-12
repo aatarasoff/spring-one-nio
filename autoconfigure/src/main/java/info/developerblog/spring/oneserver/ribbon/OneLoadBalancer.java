@@ -1,19 +1,17 @@
 package info.developerblog.spring.oneserver.ribbon;
 
+import java.net.URI;
+
+import org.springframework.cloud.netflix.ribbon.ServerIntrospector;
+
 import com.netflix.client.AbstractLoadBalancerAwareClient;
 import com.netflix.client.RequestSpecificRetryHandler;
-import com.netflix.client.RetryHandler;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
 import info.developerblog.spring.oneserver.client.OneHttpRequest;
 import info.developerblog.spring.oneserver.client.OneHttpResponse;
-
-import org.springframework.cloud.netflix.ribbon.ServerIntrospector;
-
-import java.net.URI;
-
-import static org.springframework.cloud.netflix.ribbon.RibbonUtils.updateToHttpsIfNeeded;
+import static org.springframework.cloud.netflix.ribbon.RibbonUtils.updateToSecureConnectionIfNeeded;
 
 /**
  * @author alexander.tarasov
@@ -47,7 +45,7 @@ public class OneLoadBalancer extends AbstractLoadBalancerAwareClient<OneHttpRequ
 
     @Override
     public URI reconstructURIWithServer(Server server, URI original) {
-        URI uri = updateToHttpsIfNeeded(original, this.clientConfig, this.serverIntrospector, server);
+        URI uri = updateToSecureConnectionIfNeeded(original, this.clientConfig, this.serverIntrospector, server);
         return super.reconstructURIWithServer(server, uri);
     }
 
