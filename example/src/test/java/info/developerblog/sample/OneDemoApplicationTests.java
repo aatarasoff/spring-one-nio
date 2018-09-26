@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.netflix.client.ClientException;
+import info.developerblog.sample.domain.Payload;
 import info.developerblog.spring.oneserver.client.OneHttpClient;
 import info.developerblog.spring.oneserver.client.OneHttpRequest;
 import info.developerblog.spring.oneserver.client.OneHttpResponse;
@@ -15,9 +17,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import one.nio.http.Header;
 import one.nio.http.HttpClient;
 import one.nio.http.Response;
 import one.nio.net.ConnectionString;
+import one.nio.serial.Json;
+import one.nio.serial.Repository;
+import one.nio.serial.Serializer;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -45,15 +51,15 @@ public class OneDemoApplicationTests {
 	}
 
 	@Test
-	public void loadBalancedPostCall() throws Exception {
-		byte[] payload = "Hello!".getBytes(StandardCharsets.UTF_8);
+	public void loadBalancedPostCall() throws ClientException {
+		Payload payload = new Payload().withValue("Hello!");
 
 		OneHttpResponse response = oneHttpClient.call(
 				"cool-app",
-				OneHttpRequest.post("/withBody").withBody(payload)
+				OneHttpRequest.post("/withBody").withPayload(payload)
 		);
 
-		Assert.assertEquals(true, response.isSuccess());
-		Assert.assertTrue(Arrays.equals(payload, (byte[]) response.getPayload()));
+		Assert.assertTrue(response.isSuccess());
+		Assert.assertEquals(payload, response.get());
 	}
 }

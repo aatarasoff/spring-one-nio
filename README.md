@@ -63,7 +63,7 @@ public class SimpleController {
 }
 ```
 
-In these class you should define methods to process http-requests:
+In this class you should define methods to process http-requests:
 ```java
 @Autowired
 SimpleService simpleService;
@@ -138,6 +138,19 @@ OneHttpResponse response = httpClient.call(
 );
 
 process((byte[]) response.getPayload());
+```
+
+or with payload as object (one-nio byte serialization is used under the hood):
+```java
+Payload payload = new Payload().withValue("Hello!");
+
+OneHttpResponse response = oneHttpClient.call(
+        "cool-app",
+        OneHttpRequest.post("/withBody").withPayload(payload)
+);
+
+Payload responsePayload = response.get();
+process(responsePayload);
 ```
 
 See **[example](https://github.com/aatarasoff/spring-one-nio/tree/master/example)** project for more.

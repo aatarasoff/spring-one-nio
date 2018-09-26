@@ -1,5 +1,6 @@
 package info.developerblog.spring.oneserver.client;
 
+import java.io.IOException;
 import java.net.URI;
 
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,6 +9,7 @@ import com.netflix.client.ClientRequest;
 import org.apache.commons.lang.StringUtils;
 
 import one.nio.http.Request;
+import one.nio.serial.Serializer;
 
 /**
  * @author alexander.tarasov
@@ -22,8 +24,27 @@ public class OneHttpRequest extends ClientRequest implements Cloneable {
         );
     }
 
+    public OneHttpRequest withHeader(String name, String value) {
+        this.request.addHeader(name + ": " + value);
+        return this;
+    }
+
+    public OneHttpRequest withBody(String body) {
+        this.request.setBodyUtf8(body);
+        return this;
+    }
+
     public OneHttpRequest withBody(byte[] body) {
         this.request.setBody(body);
+        return this;
+    }
+
+    public <T> OneHttpRequest withPayload(T payload) {
+        try {
+            this.request.setBody(Serializer.serialize(payload));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return this;
     }
 

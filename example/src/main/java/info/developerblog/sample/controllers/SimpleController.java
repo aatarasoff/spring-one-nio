@@ -1,9 +1,12 @@
 package info.developerblog.sample.controllers;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.netflix.client.ClientException;
+import info.developerblog.sample.domain.Payload;
 import info.developerblog.sample.services.SimpleService;
 import info.developerblog.spring.oneserver.client.OneHttpClient;
 import info.developerblog.spring.oneserver.client.OneHttpRequest;
@@ -16,6 +19,7 @@ import one.nio.http.Param;
 import one.nio.http.Path;
 import one.nio.http.Request;
 import one.nio.http.Response;
+import one.nio.serial.Serializer;
 
 /**
  * @author alexander.tarasov
@@ -37,8 +41,9 @@ public class SimpleController {
     }
 
     @Path("/withBody")
-    public Response postWithBody(Request request) {
-        return Response.ok(request.getBody());
+    public Response postWithBody(Request request) throws IOException, ClassNotFoundException {
+        Payload payload = (Payload) Serializer.deserialize(request.getBody());
+        return Response.ok(Serializer.serialize(payload));
     }
 
     @Path("/loop")

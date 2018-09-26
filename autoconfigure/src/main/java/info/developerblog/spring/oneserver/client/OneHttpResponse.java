@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 
 import one.nio.http.Header;
 import one.nio.http.Response;
+import one.nio.serial.Serializer;
 
 /**
  * @author alexander.tarasov
@@ -41,6 +42,14 @@ public class OneHttpResponse implements IResponse {
     @Override
     public Object getPayload() throws ClientException {
         return payload;
+    }
+
+    public <T> T get() throws ClientException {
+        try {
+            return (T) Serializer.deserialize(payload);
+        } catch (IOException | ClassNotFoundException e) {
+            throw new ClientException(e);
+        }
     }
 
     @Override
